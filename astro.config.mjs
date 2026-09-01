@@ -9,5 +9,5 @@ import mdx from '@astrojs/mdx';
 export default defineConfig({
   vite: {plugins: [tailwindcss()]},
   integrations: [mdx()],
-  site: 'http://example.com'
+  site: 'https://6a96b9ddf63f37b6ae0a330d--blog-astro-test01.netlify.app/'
 });
