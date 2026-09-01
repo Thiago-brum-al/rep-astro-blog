@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths } from "astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import AuthorCard from "@/components/AuthorCard.astro";
+
+const authors = await getCollection("authors");
+---
+
+<MainLayout title="Blog">
+  <section class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+    {authors.map(author => <AuthorCard id={author.id} {...author.data}/>)}
+  </section>
+</MainLayout>

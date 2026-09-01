@@ -1,17 +1,35 @@
 ---
+import BlogCard from "@/components/BlogCard.astro";
+import MainLayout from "@layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
 
+const posts = await getCollection("posts", (post) => !post.data.isDraft);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout title="Blog">
+  <div class="w-full grid place-items-center bg-zinc-900 px-10 py-20">
+    <section class="w-full max-w-3xl">
+      <div class="flex items-center justify-between mb-10">
+        <h1 class="text-white font-bold text-3xl">Posts Space</h1>
+        <a
+          href="/posts/1"
+          target="_self"
+          rel="noopener noreferrer"
+          class="text-blue-500 hover:underline transition-all duration-100"
+          >All Posts</a
+        >
+        <a
+          href="/authors/"
+          target="_self"
+          rel="noopener noreferrer"
+          class="text-blue-500 hover:underline transition-all duration-100"
+          >Authors</a
+        >
+      </div>
+      <hr class="border-white" />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-10 gap-10">
+        {posts.map((post: any) => <BlogCard {...post} />)}
+      </div>
+    </section>
+  </div>
+</MainLayout>

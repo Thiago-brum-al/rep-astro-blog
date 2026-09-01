@@ -1,0 +1,45 @@
+---
+import type { GetStaticPaths } from "astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import BlogCard from "@/components/BlogCard.astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const response = await getCollection("posts");
+  return paginate(response, { pageSize: 2 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+
+<MainLayout title="Posts">
+  <div class="w-full grid place-items-center bg-zinc-900 px-10 py-20">
+    <section class="w-full max-w-3xl">
+      <div class="flex w-full items-center justify-between mb-10">
+        <h1 class="text-white font-bold text-3xl">Posts Space</h1>
+        <a
+          href="/"
+          target="_self"
+          rel="noopener noreferrer"
+          class="text-blue-500 hover:underline transition-all duration-100"
+          >Back to home</a
+        >
+      </div>
+      <hr class="border-white" />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-10 gap-10">
+        {page.data.map((post: any) => <BlogCard {...post} />)}
+      </div>
+      <section class="w-full flex mt-10 gap-2 items-center justify-between">
+        <a
+          class={`bg-blue-50 ${!page.url.prev ? "opacity-30 pointer-events-none" : ""}  px-4 py-3 rounded-md shadow text-blue-700 font-bold font-sans`}
+          href={page.url.prev}>Previous</a
+        >
+        <span class="text-white">{page.currentPage}/{page.lastPage}</span>
+        <a
+          class={`bg-blue-50 ${!page.url.next ? "opacity-30 pointer-events-none" : ""}  px-4 py-3 rounded-md shadow text-blue-700 font-bold font-sans`}
+          href={page.url.next}>Next</a
+        >
+      </section>
+    </section>
+  </div>
+</MainLayout>

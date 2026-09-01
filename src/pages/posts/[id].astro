@@ -1,0 +1,71 @@
+---
+import type { GetStaticPaths } from "astro";
+import { render } from "astro:content";
+import BlogLayout from "@/layouts/BlogLayout.astro";
+import { getCollection } from "astro:content";
+import Image from "astro/components/Image.astro";
+import { getEntry } from "astro:content";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({ params: { id: post.id }, props: { ...post } }));
+}) satisfies GetStaticPaths;
+
+const post = Astro.props;
+const author = (await getEntry("authors", post.data.author.id))?.data;
+
+const { Content, headings } = await render(post);
+const { data } = post;
+---
+
+<BlogLayout title="Posts">
+  <h1 class="text-xs text-gray-500 mb-0">
+    {data.title}
+  </h1>
+  <div class="text-base text-gray mb-0 flex flex-row items-center mt-2">
+    <Image
+      height={40}
+      width={40}
+      quality='medium'
+      src={author?.avatar || ""}
+      class="rounded-full h-10 w-10"
+      alt={author?.name || ""}
+    />
+    <div class="flex flex-col ml-5">
+      <a href={`/authors/${data.author.id}`} target="_self" rel="noopener noreferrer">
+        {author?.name}
+      </a>
+      <span class="text-xs text-zinc-50">
+        {new Date(data.date).toLocaleDateString('pt-BR')}
+      </span>
+    </div>
+  </div>
+  <Image
+    src={data.image}
+    height={220}
+    width={600}
+    alt={data.title}
+    class="object-contain mt-5 mb-10 block"
+    transition:name=`${post.id}-image`
+  />
+  <ol>
+    {
+      headings.map((head, index) => {
+        const { slug, text } = head;
+        return (
+          <li>
+            <a href={`#${slug}`} target="_self" rel="noopener noreferrer">
+              {index}. {text}
+            </a>
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <Content />
+
+  <div class="mt-10">
+    <a href="#btn-back" target="_self" rel="noopener noreferrer">Back to top</a>
+  </div>
+</BlogLayout>

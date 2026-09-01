@@ -1,0 +1,45 @@
+---
+import Image from "astro/components/Image.astro";
+import type { RenderedContent } from "astro:content";
+import type { InferEntrySchema } from "astro:content";
+
+interface Props {
+  id: string;
+  body?: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">;
+  rendered?: RenderedContent;
+  filePath?: string;
+  digest?: string | number;
+}
+
+const { id, data, body, ...rest } = Astro.props;
+---
+
+<a
+  {id}
+  href={`/posts/${id}`}
+  target="_self"
+  aria-label="blog post"
+  rel="noopener noreferrer"
+  class="w-full flex flex-col group"
+>
+  <figure>
+    <Image
+      src={data.image}
+      height={500}
+      width={500}
+      quality="low"
+      loading="lazy"
+      alt="Imagem ilustrativa"
+      class="rounded-lg object-cover h-44 w-60"
+      transition:name=`${id}-image`
+    />
+    <figcaption
+      class="text-white mt-5 mb-2 font-bold text-xl group-hover:underline"
+    >
+      {data.description}
+    </figcaption>
+    <span class="text-zinc-400 text-base">{data.date}</span>
+  </figure>
+</a>

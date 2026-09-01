@@ -1,0 +1,76 @@
+---
+import Image from "astro/components/Image.astro";
+import Picture from "astro/components/Picture.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+
+import PostImage01 from "@/assets/images/post-01.png";
+import PostImage05 from "@/assets/images/post-05.png";
+---
+
+<MainLayout title="images">
+  <h1 class="text-5xl">Images</h1>
+  <img
+    loading="eager"
+    height="250"
+    width="250"
+    src="/assets/images/post-05.png"
+    alt=""
+    srcset=""
+  />
+
+  <h1 class="text-3xl text-white">Quality High</h1>
+  <Image
+    quality={"high"}
+    height="250"
+    width="250"
+    src={PostImage05}
+    alt="Imagem do post"
+  />
+
+  <h1 class="text-3xl text-white">Quality Low</h1>
+  <Image
+    quality={"low"}
+    height="250"
+    width="250"
+    src={PostImage05}
+    alt="Imagem do post"
+  />
+
+  <h1 class="text-3xl text-white">Formatos</h1>
+  <Image
+    quality={"low"}
+    format="jpg"
+    height="250"
+    width="250"
+    src={PostImage05}
+    alt="Imagem do post"
+  />
+
+  <h1 class="text-3xl text-white">Pictures</h1>
+  <Picture
+    quality={"low"}
+    formats={["webp", "jpg", "jpeg", "png"]}
+    widths={[240, 540, 720, PostImage05.width]}
+    sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${PostImage05.width}`}
+    height="250"
+    width="250"
+    src={PostImage05}
+    alt="Imagem do post"
+  />
+
+  <div
+    style={{
+      height: "3000px",
+    }}
+  >
+  </div>
+
+  <img
+    loading="lazy"
+    height="250"
+    width="250"
+    src="/assets/images/post-01.png"
+    alt=""
+    srcset=""
+  />
+</MainLayout>
